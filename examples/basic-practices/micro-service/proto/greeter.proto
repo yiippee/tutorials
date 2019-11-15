@@ -4,6 +4,7 @@ service Greeter {
 	rpc Hello(HelloRequest) returns (HelloResponse) {}
 }
 
+// message 用于数据结构定义
 message HelloRequest {
 	string name = 1;
 }
