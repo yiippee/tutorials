@@ -1,3 +1,5 @@
+// 兼容性语义
+
 syntax = "proto3";
 
 service Greeter {
@@ -12,3 +14,36 @@ message HelloRequest {
 message HelloResponse {
 	string greeting = 2;
 }
+
+///////////////////////////////------------------my test -------------------------------------//////////////////////////
+// 枚举
+enum Color {
+	RED = 0;
+	YELLOW = 1;
+	WHITE = 2;
+	BLACK = 3;
+}
+
+message MyInfo {
+	// 使用 protobuf 的整个想法是，它允许您添加/删除协议定义中的字段，
+	// 同时仍然完全向前/向后兼容较新/较旧的二进制文件。 >required 字段打破了这一点。
+	// required string name = 1;
+	string name = 1;
+	// 允许嵌套定义
+	message body {
+		int32 length = 1;
+		int32 weight = 2;
+	}
+	// 如果你想在它的父消息类型的外部重用这个消息类型，你需要以Parent.Type的形式使用它
+	// MyInfo.body bo = 2;
+	body bo = 2; // 内部可以直接用
+	Color color = 3;
+}
+
+message Empty {}
+
+service MyService {
+	rpc GetInfo(Empty) returns (MyInfo) {}
+}
+
+// protoc --go_out=. --micro_out=. ./greeter.proto
